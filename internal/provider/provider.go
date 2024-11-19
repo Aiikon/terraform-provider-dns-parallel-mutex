@@ -11,6 +11,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -24,6 +25,9 @@ const (
 	defaultTimeout   = "0"
 	defaultTransport = "udp"
 )
+
+// Global Mutex
+var mutex sync.Mutex
 
 // New returns a *schema.Provider for DNS dynamic updates.
 func New() *schema.Provider {

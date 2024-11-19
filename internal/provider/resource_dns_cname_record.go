@@ -107,6 +107,10 @@ func (d *dnsCNAMERecordResource) Configure(ctx context.Context, req resource.Con
 }
 
 func (d *dnsCNAMERecordResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	var plan cnameRecordResourceModel
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -170,6 +174,10 @@ func (d *dnsCNAMERecordResource) Create(ctx context.Context, req resource.Create
 }
 
 func (d *dnsCNAMERecordResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	var state cnameRecordResourceModel
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
@@ -210,6 +218,10 @@ func (d *dnsCNAMERecordResource) Read(ctx context.Context, req resource.ReadRequ
 }
 
 func (d *dnsCNAMERecordResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	var plan, state cnameRecordResourceModel
 
 	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
@@ -289,6 +301,10 @@ func (d *dnsCNAMERecordResource) Update(ctx context.Context, req resource.Update
 }
 
 func (d *dnsCNAMERecordResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	var state cnameRecordResourceModel
 
 	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)

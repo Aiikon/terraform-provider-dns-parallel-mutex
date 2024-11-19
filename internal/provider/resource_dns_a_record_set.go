@@ -69,6 +69,14 @@ func resourceDnsARecordSetCreate(ctx context.Context, d *schema.ResourceData, me
 
 func resourceDnsARecordSetRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	return readDnsARecord(ctx, d, meta)
+}
+
+func readDnsARecord(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+
 	answers, err := resourceDnsRead(d, meta, dns.TypeA)
 	if err != nil {
 		return err
@@ -101,6 +109,9 @@ func resourceDnsARecordSetRead(ctx context.Context, d *schema.ResourceData, meta
 }
 
 func resourceDnsARecordSetUpdate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	if meta != nil {
 		//nolint:forcetypeassert
@@ -157,13 +168,16 @@ func resourceDnsARecordSetUpdate(ctx context.Context, d *schema.ResourceData, me
 			}
 		}
 
-		return resourceDnsARecordSetRead(ctx, d, meta)
+		return readDnsARecord(ctx, d, meta)
 	} else {
 		return diag.Errorf("update server is not set")
 	}
 }
 
 func resourceDnsARecordSetDelete(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
+
+	mutex.Lock()
+	defer mutex.Unlock()
 
 	return resourceDnsDelete(d, meta, dns.TypeA)
 }
